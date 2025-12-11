@@ -100,7 +100,7 @@
         </button>
         <button
           class="action-btn edit-btn"
-          *ngIf="!isEditMode && bikeData?.BikeID"
+          *ngIf="!isEditMode && bikeData.BikeID"
           title="Edit"
           (click)="onEdit(bikeData.BikeID!)"
         >
@@ -199,7 +199,7 @@
           <div class="stat-icon">🔧</div>
           <div class="stat-info">
             <span class="stat-number">{{
-              bikeData?.MaintenanceDetails?.length
+              bikeData.MaintenanceDetails?.length
             }}</span>
             <span class="stat-text">Service Records</span>
           </div>
@@ -298,6 +298,7 @@
               : "is expiring soon"
           }}. Please renew it
           {{ getInsuranceStatus().status === 'Expired' ? 'immediately' : `within ${getInsuranceStatus().daysLeft} days`
+
           }}.
         </div>
 
@@ -408,7 +409,12 @@
         <p>
           Add your first maintenance record to start tracking service history
         </p>
-        <button class="btn btn-primary" (click)="openAddMaintenance(bikeData.BikeID!)">➕ Add First Record</button>
+        <button
+          class="btn btn-primary"
+          (click)="openAddMaintenance(bikeData.BikeID!)"
+        >
+          ➕ Add First Record
+        </button>
       </div>
     </div>
   </div>
