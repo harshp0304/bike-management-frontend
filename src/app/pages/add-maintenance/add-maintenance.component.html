@@ -1,0 +1,46 @@
+<div class="dialog-overlay" (click)="close()">
+  <div class="dialog-container p-3" (click)="$event.stopPropagation()">
+    <div class="form-step">
+      <div class="dialog-header">
+        <h2>Maintenance</h2>
+        <button class="close-btn" (click)="close()">✕</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Service Date *</label>
+          <input type="date" placeholder="Service Date" [(ngModel)]="maintenanceDetails.Service_Date" />
+        </div>
+        <div class="form-group">
+          <label>Service Type *</label>
+          <input type="text" placeholder="Service Type" [(ngModel)]="maintenanceDetails.Service_Type" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Service Cost (₹)</label>
+          <input type="number" placeholder="8500" [(ngModel)]="maintenanceDetails.Service_Cost" />
+        </div>
+
+        <div class="form-group">
+          <label>Mileage</label>
+          <input type="text" placeholder="20000" [(ngModel)]="maintenanceDetails.Mileage" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Service Center</label>
+          <input type="text" placeholder="Service Center" [(ngModel)]="maintenanceDetails.Service_Center" />
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" placeholder="Notes" [(ngModel)]="maintenanceDetails.Notes" />
+        </div>
+      </div>
+      <div align="end">
+        <button class="btn btn-success" (click)="onSubmit()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

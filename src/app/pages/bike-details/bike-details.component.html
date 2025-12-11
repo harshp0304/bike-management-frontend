@@ -1,0 +1,415 @@
+<div
+  class="dialog-overlay"
+  *ngIf="isMaintenanceDialogOpen"
+  (click)="closeMaintenanceDialog()"
+>
+  <div
+    class="dialog-container maintenance-dialog"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="dialog-header">
+      <h3>🔧 Add Maintenance Record</h3>
+      <button class="close-btn" (click)="closeMaintenanceDialog()">✕</button>
+    </div>
+
+    <div class="dialog-content">
+      <div class="form-group">
+        <label>Service Date *</label>
+        <input
+          type="date"
+          [(ngModel)]="maintenanceForm.Service_Date"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Service Type *</label>
+        <select [(ngModel)]="maintenanceForm.Service_Type" class="form-control">
+          <option value="">Select Type</option>
+          <option value="Oil Change">Oil Change</option>
+          <option value="General Service">General Service</option>
+          <option value="Chain Cleaning">Chain Cleaning</option>
+          <option value="Brake Service">Brake Service</option>
+          <option value="Tire Replacement">Tire Replacement</option>
+          <option value="Battery Replacement">Battery Replacement</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cost (₹) *</label>
+          <input
+            type="number"
+            [(ngModel)]="maintenanceForm.Service_Cost"
+            class="form-control"
+            placeholder="1500"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Mileage (km)</label>
+          <input
+            type="number"
+            [(ngModel)]="maintenanceForm.Mileage"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea
+          [(ngModel)]="maintenanceForm.Notes"
+          class="form-control"
+          rows="3"
+          placeholder="Additional notes..."
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button class="btn btn-secondary" (click)="closeMaintenanceDialog()">
+        Cancel
+      </button>
+      <button class="btn btn-primary">Add Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="bike-details-container" *ngIf="bikeData">
+  <!-- Header -->
+  <header class="details-header">
+    <div class="header-top">
+      <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+
+      <div class="header-actions">
+        <!-- <button class="action-btn" (click)="shareBike()" title="Share">
+          <span>📤</span>
+        </button>
+        <button
+          class="action-btn"
+          (click)="exportBikeData()"
+          title="Export Data"
+        >
+          <span>💾</span>
+        </button> -->
+        <button class="action-btn" (click)="printDetails()" title="Print">
+          <span>🖨️</span>
+        </button>
+        <button
+          class="action-btn edit-btn"
+          *ngIf="!isEditMode && bikeData?.BikeID"
+          title="Edit"
+          (click)="onEdit(bikeData.BikeID!)"
+        >
+          <span>✏️</span>
+        </button>
+        <!-- <button class="action-btn delete-btn" title="Delete">
+          <span>🗑️</span>
+        </button> -->
+      </div>
+    </div>
+
+    <div class="header-content">
+      <div class="bike-title">
+        <div class="bike-icon-large">🏍️</div>
+        <div>
+          <h1>{{ bikeData.BikeName }}</h1>
+          <p class="bike-subtitle">
+            {{ bikeData.Model }} • {{ bikeData.Color }}
+          </p>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="header-stat">
+          <span class="stat-value">{{ bikeData.Amount }}</span>
+          <span class="stat-label">Purchase Price</span>
+        </div>
+        <!-- <div class="header-stat">
+          <span class="stat-value">{{ bikeData.Mileage }} km</span>
+          <span class="stat-label">Current Mileage</span>
+        </div> -->
+        <!-- <div class="header-stat" [style.color]="getInsuranceStatus().color">
+          <span class="stat-value"
+            >{{ getInsuranceStatus().daysLeft }} days</span
+          >
+          <span class="stat-label">{{ getInsuranceStatus().status }}</span>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Edit Mode Buttons -->
+    <div class="edit-actions" *ngIf="isEditMode">
+      <button class="btn btn-success">💾 Save Changes</button>
+      <button class="btn btn-secondary">Cancel</button>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs-container">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'overview'"
+      (click)="setActiveTab('overview')"
+    >
+      📊 Overview
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'insurance'"
+      (click)="setActiveTab('insurance')"
+    >
+      🛡️ Insurance
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'maintenance'"
+      (click)="setActiveTab('maintenance')"
+    >
+      🔧 Maintenance
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Overview Tab -->
+    <div *ngIf="activeTab === 'overview'" class="tab-panel">
+      <!-- Quick Stats -->
+      <div class="quick-stats">
+        <div class="stat-box">
+          <div class="stat-icon">📅</div>
+          <div class="stat-info">
+            <span class="stat-number">{{ getDaysSinceLastService() }}</span>
+            <span class="stat-text">Days Since Last Service</span>
+          </div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <span class="stat-number">{{ getTotalMaintenanceCost() }}</span>
+            <span class="stat-text">Total Maintenance Cost</span>
+          </div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-icon">🔧</div>
+          <div class="stat-info">
+            <span class="stat-number">{{
+              bikeData?.MaintenanceDetails?.length
+            }}</span>
+            <span class="stat-text">Service Records</span>
+          </div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-icon">📈</div>
+          <div class="stat-info">
+            <span class="stat-number">{{ getAverageMaintenanceCost() }}</span>
+            <span class="stat-text">Avg Service Cost</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-card">
+          <h3>📋 Purchase Information</h3>
+          <div class="detail-item">
+            <span class="detail-label">Purchase Date:</span>
+            <span class="detail-value">{{ bikeData.PurchaseDate }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Amount Paid:</span>
+            <span class="detail-value">{{ bikeData.Amount }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Fuel Type:</span>
+            <span class="detail-value">{{ bikeData.FuelType }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Color:</span>
+            <span class="detail-value">{{ bikeData.Color }}</span>
+          </div>
+        </div>
+        <div class="detail-card">
+          <h3>📋 Registration Details</h3>
+          <div class="detail-item">
+            <span class="detail-label">Registration Number:</span>
+            <span class="detail-value strong">{{
+              bikeData.RegistrationNo
+            }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Valid Until:</span>
+            <span class="detail-value">{{ bikeData.Valid_Until }}</span>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <h3>⛽ Current Status</h3>
+          <!-- <div class="detail-item">
+            <span class="detail-label">Current Mileage:</span>
+            <span class="detail-value">{{ bikeData.Mileage }} km</span>
+          </div> -->
+          <div class="detail-item">
+            <span class="detail-label">Last Service:</span>
+            <span class="detail-value">{{
+              getLastMaintenance()
+                ? getLastMaintenance()!.Service_Date
+                : "No records"
+            }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Days Since Service:</span>
+            <span class="detail-value"
+              >{{ getDaysSinceLastService() }} days</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insurance Tab -->
+    <div *ngIf="activeTab === 'insurance'" class="tab-panel">
+      <div class="insurance-card">
+        <div class="insurance-header">
+          <h2>🛡️ Insurance Details</h2>
+          <span
+            class="insurance-badge"
+            [style.background]="getInsuranceStatus().color"
+          >
+            {{ getInsuranceStatus().status }}
+          </span>
+        </div>
+
+        <div
+          class="insurance-alert"
+          *ngIf="getInsuranceStatus().status !== 'Active'"
+          [style.background]="getInsuranceStatus().color + '20'"
+          [style.border-left-color]="getInsuranceStatus().color"
+        >
+          <strong>⚠️ Attention Required:</strong> Your insurance
+          {{
+            getInsuranceStatus().status === "Expired"
+              ? "has expired"
+              : "is expiring soon"
+          }}. Please renew it
+          {{ getInsuranceStatus().status === 'Expired' ? 'immediately' : `within ${getInsuranceStatus().daysLeft} days`
+          }}.
+        </div>
+
+        <div class="insurance-details">
+          <div class="detail-row">
+            <span class="detail-label">Insurance Provider:</span>
+            <span class="detail-value">{{ InsuranceDetails.CompanyName }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Policy Number:</span>
+            <span class="detail-value strong">{{
+              InsuranceDetails.Policy_Number
+            }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Valid From:</span>
+            <span class="detail-value">{{ InsuranceDetails.Valid_From }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Valid Until:</span>
+            <span class="detail-value">{{ InsuranceDetails.Valid_Until }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Days Remaining:</span>
+            <span class="detail-value"
+              >{{ getInsuranceStatus().daysLeft }} days</span
+            >
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Annual Premium:</span>
+            <span class="detail-value">{{ InsuranceDetails.Premium }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Coverage Amount:</span>
+            <span class="detail-value">{{
+              InsuranceDetails.Coverage_Amount
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Maintenance Tab -->
+    <div *ngIf="activeTab === 'maintenance'" class="tab-panel">
+      <div class="tab-header">
+        <h2>🔧 Maintenance History</h2>
+        @if (MaintenanceDetails?.length > 0) {
+        <button
+          class="btn btn-primary"
+          (click)="openAddMaintenance(bikeData.BikeID!)"
+        >
+          Add Maintenance
+        </button>
+        }
+      </div>
+
+      <div class="maintenance-summary">
+        <div class="summary-item">
+          <span class="summary-label">Total Spent:</span>
+          <span class="summary-value">{{ getTotalMaintenanceCost() }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Total Services:</span>
+          <span class="summary-value">{{ MaintenanceDetails?.length }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Average Cost:</span>
+          <span class="summary-value">{{ getAverageMaintenanceCost() }}</span>
+        </div>
+      </div>
+      <div class="maintenance-list" *ngIf="MaintenanceDetails?.length > 0">
+        <div *ngFor="let maintenance of MaintenanceDetails; let i = index">
+          <div
+            class="d-flex justify-content-between border-radius-10"
+            style="background: #f9f9f9"
+          >
+            <div class="maintenance-item">
+              <div class="maintenance-date">
+                <span class="date-day">{{ maintenance.Service_Date }}</span>
+                <span class="mileage-badge">{{ maintenance.Mileage }} km</span>
+              </div>
+              <div class="maintenance-content">
+                <div class="maintenance-header">
+                  <h3>{{ maintenance.Service_Type }}</h3>
+                  <!-- <button class="delete-btn-small" (click)="deleteMaintenance(i)" title="Delete">🗑️</button> -->
+                </div>
+                <p class="maintenance-cost">
+                  Cost: {{ maintenance.Service_Cost }}
+                </p>
+                <p class="maintenance-notes">
+                  {{ maintenance.Service_Center }}
+                </p>
+              </div>
+            </div>
+            <div class="me-5 mt-3 cursor-pointer">
+              <mat-icon
+                (click)="openEditMaintenance(MaintenanceDetails[i].MNID)"
+                >edit</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="MaintenanceDetails?.length === 0">
+        <div class="empty-icon">🔧</div>
+        <h3>No Maintenance Records Yet</h3>
+        <p>
+          Add your first maintenance record to start tracking service history
+        </p>
+        <button class="btn btn-primary" (click)="openAddMaintenance(bikeData.BikeID!)">➕ Add First Record</button>
+      </div>
+    </div>
+  </div>
+</div>

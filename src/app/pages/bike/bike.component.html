@@ -1,0 +1,111 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div>
+        <h1>🏍️ My Vehicles Dashboard</h1>
+        <p>Manage your vehicle information and maintenance records</p>
+      </div>
+      <div><button class="add-bike-btn" (click)="onAdd()">➕ Add New Vehicle</button></div>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">🏍️</div>
+      <div class="stat-content">
+        <h3>{{ bikeData?.length }}</h3>
+        <p>Total Vehicles</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <h3>{{ getTotalInvestment() }}</h3>
+        <p>Total Investment</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🛡️</div>
+      <div class="stat-content">
+        <h3>{{ getActiveInsuranceCount() }}</h3>
+        <p>Active Insurance</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🔧</div>
+      <div class="stat-content">
+        <!-- <h3>{{ getTotalServiceRecords() }}</h3> -->
+        <p>Service Records</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bikes-grid">
+    <div class="bike-card" *ngFor="let bike of bikeData">
+      <div class="bike-card-header">
+        <div class="bike-icon">🏍️</div>
+        <div class="bike-header-info">
+          <h2>{{ bike.BikeName }}</h2>
+          <p class="bike-model">{{ bike.Model }}</p>
+        </div>
+      </div>
+
+      <div class="bike-info-grid">
+        <div class="info-item">
+          <span class="info-icon">📅</span>
+          <div>
+            <p class="info-label">Purchase Date</p>
+            <p class="info-value">{{ bike.PurchaseDate }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">💰</span>
+          <div>
+            <p class="info-label">Amount Paid</p>
+            <p class="info-value">{{ bike.Amount }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">🛡️</span>
+          <div>
+            <p class="info-label">Insurance</p>
+            <p class="info-value">{{ bike.Insurance }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">📋</span>
+          <div>
+            <p class="info-label">Registration</p>
+            <p class="info-value">{{ bike.RegistrationNo }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">🎨</span>
+          <div>
+            <p class="info-label">Color</p>
+            <p class="info-value">{{ bike.Color }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">⛽</span>
+          <div>
+            <p class="info-label">Fuel Type</p>
+            <p class="info-value">{{ bike.FuelType }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="view-details-btn cursor-pointer" (click)="onViewDetails(bike.BikeID)">
+        View Full Details →
+      </div>
+    </div>
+  </div>
+</div>

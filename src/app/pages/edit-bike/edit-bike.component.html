@@ -1,0 +1,302 @@
+<div class="dialog-overlay" (click)="close()">
+  <div class="dialog-container" (click)="$event.stopPropagation()">
+    <!-- Dialog Header -->
+    <div class="dialog-header">
+      <h2>Vehicle Details</h2>
+      <button class="close-btn" (click)="close()">✕</button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" [style.width.%]="getProgressPercentage()"></div>
+    </div>
+
+    <!-- Step Indicators -->
+    <div class="step-indicators">
+      <div
+        class="step-indicator"
+        [class.active]="currentStep === 1"
+        [class.completed]="currentStep > 1"
+        (click)="goToStep(1)"
+      >
+        <span class="step-number">1</span>
+        <span class="step-label">Basic Info</span>
+      </div>
+      <div
+        class="step-indicator"
+        [class.active]="currentStep === 2"
+        [class.completed]="currentStep > 2"
+        (click)="goToStep(2)"
+      >
+        <span class="step-number">2</span>
+        <span class="step-label">Insurance</span>
+      </div>
+      <div
+        class="step-indicator"
+        [class.active]="currentStep === 3"
+        [class.completed]="currentStep > 3"
+        (click)="goToStep(3)"
+      >
+        <span class="step-number">3</span>
+        <span class="step-label">Registration</span>
+      </div>
+    </div>
+
+    <!-- Dialog Content -->
+    <div class="dialog-content">
+      <!-- Step 1: Basic Information -->
+      <div class="form-step" *ngIf="currentStep === 1">
+        <h3>📋 Basic Information</h3>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Bike Name *</label>
+            <input
+              type="text"
+              [(ngModel)]="bikeDetails.BikeName"
+              placeholder="e.g., Royal Enfield Classic 350"
+              [class.error]="errors.BikeName"
+            />
+            <span class="error-message" *ngIf="errors.BikeName">{{
+              errors.BikeName
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Brand *</label>
+            <select
+              [(ngModel)]="bikeDetails.Brand"
+              [class.error]="errors.Brand"
+            >
+              <option value="">Select Brand</option>
+              <option value="Royal Enfield">Royal Enfield</option>
+              <option value="Honda">Honda</option>
+              <option value="Hero">Hero</option>
+              <option value="Bajaj">Bajaj</option>
+              <option value="TVS">TVS</option>
+              <option value="Yamaha">Yamaha</option>
+              <option value="KTM">KTM</option>
+              <option value="Suzuki">Suzuki</option>
+              <option value="Harley-Davidson">Harley-Davidson</option>
+              <option value="Other">Other</option>
+            </select>
+            <span class="error-message" *ngIf="errors.Brand">{{
+              errors.Brand
+            }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Model *</label>
+            <input
+              type="text"
+              [(ngModel)]="bikeDetails.Model"
+              placeholder="e.g., Classic 350"
+              [class.error]="errors.Model"
+            />
+            <span class="error-message" *ngIf="errors.Model">{{
+              errors.Model
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Purchase Date *</label>
+            <input
+              type="date"
+              [(ngModel)]="bikeDetails.PurchaseDate"
+              [class.error]="errors.PurchaseDate"
+            />
+            <span class="error-message" *ngIf="errors.PurchaseDate">{{
+              errors.PurchaseDate
+            }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Purchase Amount (₹) *</label>
+            <input
+              type="number"
+              [(ngModel)]="bikeDetails.Amount"
+              placeholder="185000"
+              [class.error]="errors.Amount"
+            />
+            <span class="error-message" *ngIf="errors.Amount">{{
+              errors.Amount
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- <div class="form-group">
+            <label>Current Mileage (km)</label>
+            <input
+              type="number"
+              [(ngModel)]="formData.Mileage"
+              placeholder="8500"
+            />
+          </div> -->
+
+          <div class="form-group">
+            <label>Fuel Type</label>
+            <select [(ngModel)]="bikeDetails.FuelType">
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Color</label>
+            <input
+              type="text"
+              [(ngModel)]="bikeDetails.Color"
+              placeholder="e.g., Stealth Black"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-step" *ngIf="currentStep === 2">
+        <h3>🛡️ Insurance Details</h3>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Insurance Provider *</label>
+            <input
+              type="text"
+              [(ngModel)]="insuranceDetails.CompanyName"
+              placeholder="e.g., HDFC ERGO"
+              [class.error]="errors.CompanyName"
+            />
+            <span class="error-message" *ngIf="errors.CompanyName">{{
+              errors.CompanyName
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Policy Number *</label>
+            <input
+              type="text"
+              [(ngModel)]="insuranceDetails.Policy_Number"
+              placeholder="HD123456789"
+              [class.error]="errors.Policy_Number"
+            />
+            <span class="error-message" *ngIf="errors.Policy_Number">{{
+              errors.Policy_Number
+            }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Valid From *</label>
+            <input
+              type="date"
+              [(ngModel)]="insuranceDetails.Valid_From"
+              [class.error]="errors.Valid_From"
+            />
+            <span class="error-message" *ngIf="errors.Valid_From">{{
+              errors.Valid_From
+            }}</span>
+          </div>
+          <div class="form-group">
+            <label>Valid Until *</label>
+            <input
+              type="date"
+              [(ngModel)]="insuranceDetails.Valid_Until"
+              [class.error]="errors.Valid_Until"
+            />
+            <span class="error-message" *ngIf="errors.Valid_Until">{{
+              errors.Valid_Until
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Annual Premium (₹)</label>
+            <input
+              type="number"
+              [(ngModel)]="insuranceDetails.Premium"
+              placeholder="8500"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Coverage Amount (₹)</label>
+            <input
+              type="number"
+              [(ngModel)]="insuranceDetails.Coverage_Amount"
+              placeholder="200000"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-step" *ngIf="currentStep === 3">
+        <h3>📋 Registration Details</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Registration Number *</label>
+            <input
+              type="text"
+              [(ngModel)]="bikeDetails.RegistrationNo"
+              placeholder="GJ-01-AB-1234"
+              [class.error]="errors.RegistrationNo"
+            />
+            <span class="error-message" *ngIf="errors.RegistrationNo">{{
+              errors.RegistrationNo
+            }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Valid Until *</label>
+            <input
+              type="date"
+              [(ngModel)]="bikeDetails.Valid_Until"
+              [class.error]="errors.Valid_Until"
+            />
+            <span class="error-message" *ngIf="errors.Valid_Until">{{
+              errors.Valid_Until
+            }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialog Footer -->
+      <div class="dialog-footer">
+        <button
+          class="btn btn-secondary"
+          *ngIf="currentStep > 1"
+          (click)="previousStep()"
+        >
+          ← Previous
+        </button>
+
+        <button class="btn btn-secondary" (click)="close()">Cancel</button>
+
+        <button
+          class="btn btn-primary"
+          *ngIf="currentStep < totalSteps"
+          (click)="nextStep()"
+        >
+          Next →
+        </button>
+
+        <button
+          class="btn btn-success"
+          *ngIf="currentStep === totalSteps"
+          (click)="onSubmit()"
+        >
+          {{ mode === "create" ? "✓ Create Bike" : "✓ Save Changes" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
