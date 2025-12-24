@@ -5,7 +5,11 @@
         <h1>🏍️ My Vehicles Dashboard</h1>
         <p>Manage your vehicle information and maintenance records</p>
       </div>
-      <div><button class="add-bike-btn" (click)="onAdd()">➕ Add New Vehicle</button></div>
+      <div>
+        <button class="add-bike-btn" (click)="onAdd()">
+          ➕ Add New Vehicle
+        </button>
+      </div>
     </div>
   </header>
 
@@ -37,7 +41,7 @@
     <div class="stat-card">
       <div class="stat-icon">🔧</div>
       <div class="stat-content">
-        <!-- <h3>{{ getTotalServiceRecords() }}</h3> -->
+        <h3>{{ getTotalServiceRecords() }}</h3>
         <p>Service Records</p>
       </div>
     </div>
@@ -58,7 +62,9 @@
           <span class="info-icon">📅</span>
           <div>
             <p class="info-label">Purchase Date</p>
-            <p class="info-value">{{ bike.PurchaseDate }}</p>
+            <p class="info-value">
+              {{ bike.PurchaseDate | date : "dd MMM yyyy" }}
+            </p>
           </div>
         </div>
 
@@ -103,7 +109,10 @@
         </div>
       </div>
 
-      <div class="view-details-btn cursor-pointer" (click)="onViewDetails(bike.BikeID)">
+      <div
+        class="view-details-btn cursor-pointer"
+        (click)="onViewDetails(bike.BikeID)"
+      >
         View Full Details →
       </div>
     </div>

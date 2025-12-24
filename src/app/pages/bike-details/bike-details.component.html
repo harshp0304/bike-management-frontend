@@ -219,7 +219,9 @@
           <h3>📋 Purchase Information</h3>
           <div class="detail-item">
             <span class="detail-label">Purchase Date:</span>
-            <span class="detail-value">{{ bikeData.PurchaseDate }}</span>
+            <span class="detail-value">{{
+              bikeData.PurchaseDate | date : "dd MMM yyyy"
+            }}</span>
           </div>
           <div class="detail-item">
             <span class="detail-label">Amount Paid:</span>
@@ -244,7 +246,9 @@
           </div>
           <div class="detail-item">
             <span class="detail-label">Valid Until:</span>
-            <span class="detail-value">{{ bikeData.Valid_Until }}</span>
+            <span class="detail-value">{{
+              bikeData.Valid_Until | date : "dd MMM yyyy"
+            }}</span>
           </div>
         </div>
 
@@ -298,6 +302,22 @@
               : "is expiring soon"
           }}. Please renew it
           {{ getInsuranceStatus().status === 'Expired' ? 'immediately' : `within ${getInsuranceStatus().daysLeft} days`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           }}.
         </div>
@@ -377,7 +397,9 @@
           >
             <div class="maintenance-item">
               <div class="maintenance-date">
-                <span class="date-day">{{ maintenance.Service_Date }}</span>
+                <span class="date-day">{{
+                  maintenance.Service_Date | date : "dd MMM yyyy"
+                }}</span>
                 <span class="mileage-badge">{{ maintenance.Mileage }} km</span>
               </div>
               <div class="maintenance-content">

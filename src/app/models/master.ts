@@ -49,7 +49,7 @@ export class Maintenance {
   MNID?: number;
 
   BikeID?: number;
-  Service_Date?: Date;
+  Service_Date?: any;
   Service_Type?: string;
   Service_Cost?: number;
   Mileage?: number;
@@ -70,4 +70,9 @@ export interface Document {
   name: string;
   type: string;
   uploadDate: string;
+}
+
+export class Cls_User {
+  MobileNo?: string = '7096119971';
+  Password?: string;
 }

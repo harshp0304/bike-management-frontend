@@ -7,8 +7,11 @@
         <span>VehicleManager</span>
       </div>
       <h2>Manage your fleet with confidence.</h2>
-      <p>Streamline your operations, track assets, and optimize performance all in one place.</p>
-      
+      <p>
+        Streamline your operations, track assets, and optimize performance all
+        in one place.
+      </p>
+
       <div class="brand-footer">
         <span>© 2025 Vehicle Management System</span>
       </div>
@@ -24,49 +27,43 @@
         <p>Please enter your details.</p>
       </div>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="input-group">
-          <label>Mobile Number</label>
-          <mat-form-field appearance="outline" class="custom-input">
-            <input matInput formControlName="mobile" placeholder="Enter your mobile number" type="tel" maxlength="10">
-            <mat-icon matSuffix>smartphone</mat-icon>
-            <mat-error *ngIf="loginForm.get('mobile')?.hasError('required')">Mobile number is required</mat-error>
-            <mat-error *ngIf="loginForm.get('mobile')?.hasError('pattern')">Please enter a valid 10-digit mobile number</mat-error>
-          </mat-form-field>
-        </div>
+      <div class="input-group">
+        <label>Mobile Number</label>
+        <mat-form-field appearance="outline" class="custom-input">
+          <input
+            matInput
+            [(ngModel)]="user.MobileNo"
+            placeholder="Enter your mobile number"
+            type="text"
+            maxlength="10"
+          />
+          <mat-icon matSuffix>smartphone</mat-icon>
+        </mat-form-field>
+      </div>
 
-        <div class="input-group">
-          <label>Password</label>
-          <mat-form-field appearance="outline" class="custom-input">
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="••••••••">
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
-            <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">Min 6 characters</mat-error>
-          </mat-form-field>
-        </div>
+      <div class="input-group">
+        <label>Password</label>
+        <mat-form-field appearance="outline" class="custom-input">
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            [(ngModel)]="user.Password"
+            placeholder="User password...."
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hidePassword = !hidePassword"
+            type="button"
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
 
-        <div class="form-actions">
-          <div class="remember-me">
-            <!-- Optional: Add checkbox here if needed later -->
-          </div>
-          <!-- <a href="#" class="forgot-link">Forgot password?</a> -->
-        </div>
-
-        <button mat-flat-button class="submit-btn" type="submit" (click)="onSubmit()">
-          Sign in
-        </button>
-
-        <!-- <button mat-stroked-button class="google-btn" type="button">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
-          Sign in with Google
-        </button> -->
-      </form>
-
-      <!-- <div class="signup-footer">
-        Don't have an account? <a href="#">Sign up for free</a>
-      </div> -->
+      <button class="btn btn-primary w-100" (click)="onSubmit()">Login</button>
     </div>
   </div>
 </div>

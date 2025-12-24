@@ -13,6 +13,7 @@ export class MasterService {
   private api = environment.API_URL;
 
   //#region get
+
   getBikes() {
     return this.httpClient.get<any>(`${this.api}/bike`);
   }

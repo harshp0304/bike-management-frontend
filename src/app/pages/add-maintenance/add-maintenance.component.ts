@@ -30,6 +30,13 @@ export class AddMaintenanceComponent implements OnInit {
     this.masterService.getMaintenanceDetailsById(id).subscribe((res: any) => {
       if (res && res.length > 0) {
         this.maintenanceDetails = res[0];
+        if (this.maintenanceDetails.Service_Date) {
+          this.maintenanceDetails.Service_Date = new Date(
+            this.maintenanceDetails.Service_Date
+          )
+            .toISOString()
+            .split('T')[0];
+        }
       }
     });
   }
@@ -42,16 +49,17 @@ export class AddMaintenanceComponent implements OnInit {
       Service_Center: this.maintenanceDetails.Service_Center,
       Notes: this.maintenanceDetails.Notes,
       Service_Date: this.maintenanceDetails.Service_Date,
-      BikeID: this.data.bikeID
+      BikeID: this.data.bikeID,
     };
 
     if (this.data.mnID) {
       // For update, include the MNID
-      this.masterService.updateMaintenance(this.data.mnID, tempModal).subscribe((res: any) => {
-        this.dialogRef.close();
-      });
+      this.masterService
+        .updateMaintenance(this.data.mnID, tempModal)
+        .subscribe((res: any) => {
+          this.dialogRef.close();
+        });
     } else {
-      // For new record, don't include MNID to let the database auto-increment it
       this.masterService.addMaintenance(tempModal).subscribe((res: any) => {
         this.dialogRef.close();
       });

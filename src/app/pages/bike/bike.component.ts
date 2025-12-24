@@ -65,7 +65,7 @@ export class BikeComponent implements OnInit {
   getTotalInvestment(): number {
     return this.bikeData
       ? this.bikeData.reduce(
-          (sum: any, bike: any) => sum + (bike.Amount || 0),
+          (sum: any, bike: any) => sum + Number(bike.Amount || 0),
           0
         )
       : 0;
@@ -87,10 +87,12 @@ export class BikeComponent implements OnInit {
   }
 
   getTotalServiceRecords(): number {
-    return this.bikeData.reduce(
-      (sum: any, bike: any) => sum + bike.maintenance.length,
-      0
-    );
+    return this.bikeData
+      ? this.bikeData.reduce(
+          (sum: any, bike: any) => sum + (bike.MaintenanceDetails?.length || 0),
+          0
+        )
+      : 0;
   }
 
   onViewDetails(id: any) {

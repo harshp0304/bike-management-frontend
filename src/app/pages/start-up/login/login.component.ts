@@ -1,11 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { Cls_User } from '../../../models/master';
+import { SharedModule } from '../../../shared/shared.module';
 
 @Component({
   selector: 'app-login',
@@ -16,27 +24,32 @@ import { Router } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    SharedModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  hidePassword = true;
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.loginForm = this.fb.group({
-      mobile: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+  hidePassword = true;
+  user = new Cls_User();
 
   onSubmit() {
-    this.router.navigate(['/bike']);
-    if (this.loginForm.valid) {
-      console.log('Form Submitted', this.loginForm.value);
-      // TODO: Implement actual login logic
-    }
+    const temmModel = new Cls_User();
+    temmModel.MobileNo = this.user.MobileNo;
+    temmModel.Password = this.user.Password;
+    console.log(temmModel);
+
+    this.authService.login(temmModel).subscribe((res) => {
+      sessionStorage.setItem('token', res.access_token);
+      sessionStorage.setItem('UMID', res.user.UMID);
+      sessionStorage.setItem('MobileNo', res.user.MobileNo);
+      this.router.navigate(['/bike']);
+
+      console.log(res);
+    });
   }
 }
